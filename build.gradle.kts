@@ -4,10 +4,36 @@ plugins {
     id("gg.essential.loom") version "0.10.0.+"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("net.kyori.blossom") version "1.3.1"
 }
 
 group = "com.example.archloomtemplate"
-version = "1.0.0"
+val modname: String by project
+val version: String by project
+val modid: String by project
+//rootProject.name = modname
+
+// Replaces all occurrences of the specified string in the code
+// Only works on code and NOT in files like mcmod.info use processResources for that
+blossom {
+    replaceToken("@NAME@", modname)
+    replaceToken("@VER@", version)
+    replaceToken("@ID@", modid)
+}
+tasks {
+    processResources {
+        filesMatching("mcmod.info") {
+            expand(
+                mapOf(
+                    "modname" to modname,
+                    "modid" to modid,
+                    "version" to version, // this replaces ${version} with the version variable
+                    "mcversion" to "1.8.9"
+                )
+            )
+        }
+    }
+}
 
 // Toolchains:
 java {
@@ -23,17 +49,17 @@ loom {
             property("mixin.debug", "true")
             property("asmhelper.verbose", "true")
             arg("--tweakClass", "org.spongepowered.asm.launch.MixinTweaker")
-            arg("--mixin", "mixins.examplemod.json")
+            arg("--mixin", "mixins.${modid}.json")
         }
     }
     forge {
         pack200Provider.set(dev.architectury.pack200.java.Pack200Adapter())
         // If you don't want mixins, remove this lines
-        mixinConfig("mixins.examplemod.json")
+        mixinConfig("mixins.${modid}.json")
     }
     // If you don't want mixins, remove these lines
     mixin {
-        defaultRefmapName.set("mixins.examplemod.refmap.json")
+        defaultRefmapName.set("mixins.${modid}.refmap.json")
     }
 }
 
@@ -77,14 +103,14 @@ tasks.withType(JavaCompile::class) {
 }
 
 tasks.withType(Jar::class) {
-    archiveBaseName.set("examplemod")
+    archiveBaseName.set(modid)
     manifest.attributes.run {
         this["FMLCorePluginContainsFMLMod"] = "true"
         this["ForceLoadAsMod"] = "true"
 
         // If you don't want mixins, remove these lines
         this["TweakClass"] = "org.spongepowered.asm.launch.MixinTweaker"
-        this["MixinConfigs"] = "mixins.examplemod.json"
+        this["MixinConfigs"] = "mixins.${modid}.json"
     }
 }
 
