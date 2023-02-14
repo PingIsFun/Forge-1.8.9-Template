@@ -18,4 +18,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "examplemod"
+rootProject.name = "Forge 1.8.9 Template"
