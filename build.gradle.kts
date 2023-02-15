@@ -11,7 +11,6 @@ group = "com.example.archloomtemplate"
 val modname: String by project
 val version: String by project
 val modid: String by project
-//rootProject.name = modname
 
 // Replaces all occurrences of the specified string in the code
 // Only works on code and NOT in files like mcmod.info use processResources for that

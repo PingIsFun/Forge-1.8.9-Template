@@ -18,4 +18,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Forge 1.8.9 Template"
+val modname: String by settings
+
+rootProject.name = modname
