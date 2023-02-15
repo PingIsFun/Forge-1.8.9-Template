@@ -7,7 +7,7 @@ plugins {
     id("net.kyori.blossom") version "1.3.1"
 }
 
-group = "com.example.archloomtemplate"
+val group: String by project // Specify the group manually in mixins.[modid].json
 val modname: String by project
 val version: String by project
 val modid: String by project
@@ -27,7 +27,8 @@ tasks {
                     "modname" to modname,
                     "modid" to modid,
                     "version" to version, // this replaces ${version} with the version variable
-                    "mcversion" to "1.8.9"
+                    "mcversion" to "1.8.9",
+                    "group" to group
                 )
             )
         }
